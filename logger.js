@@ -1,4 +1,4 @@
-export function logger(req, res, next) {
+function logger  (req, res, next) {
   const now = new Date().toISOString();
   console.log(`[${now}] ${req.method} ${req.originalUrl}`);
 
@@ -11,3 +11,5 @@ export function logger(req, res, next) {
 
   next(); 
 }
+
+module.exports = logger

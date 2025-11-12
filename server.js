@@ -7,7 +7,7 @@ const { connect } = require('./models/db');
 
 const lessonsRouter = require('./routes/lesson');
 const ordersRouter = require('./routes/order');
-const { logger } = require('./logger');
+const logger = require('./logger');
 
 const app = express();
 app.use(cors());
