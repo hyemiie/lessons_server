@@ -15,7 +15,7 @@ app.use(express.json());
 app.use('/api/lessons', lessonsRouter);
 app.use('/api/orders', ordersRouter);
 
-app.get('/health', (req, res) => res.json({ status: 'ok' }));
+app.get('/health_check', (req, res) => res.json({ status: 'ok' }));
 
 const PORT = process.env.PORT || 5000;
 

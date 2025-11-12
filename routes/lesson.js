@@ -22,18 +22,6 @@ router.get('/', async (req, res) => {
 });
 
 
-router.get('/lessons', async(req,res) =>{
-  try{
-    const Lessonss = await coll();
-    const all_lessons = Lessonss.findAll()
-    console.log(all_lessons)
-  }
-  catch(err){
-    console.log("err", err)
-
-  }
-})
-
 router.get('/:id', async (req, res) => {
   try {
     const c = await coll();
@@ -50,7 +38,6 @@ router.post('/', async (req, res) => {
   try {
     const c = await coll();
     const payload = req.body;
-    // basic validation (change as needed)
     if (!payload.title) return res.status(400).json({ error: 'title required' });
     const result = await c.insertOne(payload);
     res.status(201).json({ insertedId: result.insertedId });
@@ -83,5 +70,36 @@ router.delete('/:id', async (req, res) => {
     res.status(400).json({ error: 'Invalid id' });
   }
 });
+
+router.get("/search/:searchTerm", async (req, res) => {
+  try {
+    const searchWord = req.params.searchTerm;
+    const collection = await coll();
+
+    if (!searchWord.trim()) {
+      const all = await collection.find().toArray();
+      return res.json({ success: true, data: all });
+    }
+
+    const maybeNumber = Number(searchWord);
+    const isNumeric = !isNaN(maybeNumber);
+
+    const query = {
+      $or: [
+        { subject: { $regex: searchWord, $options: 'i' } },
+        { location: { $regex: searchWord, $options: 'i' } },
+        ...(isNumeric ? [{ price: maybeNumber }] : []),
+        ...(isNumeric ? [{ spaces: maybeNumber }] : []),
+      ],
+    };
+
+    const results = await collection.find(query).toArray();
+    res.json({ success: true, data: results }); // ✅ send the response
+  } catch (err) {
+    console.error('Search error:', err);
+    res.status(500).json({ success: false, message: 'Server error' }); // ✅ send error
+  }
+});
+
 
 module.exports = router;

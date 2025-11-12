@@ -11,7 +11,7 @@ async function coll() {
 router.get('/', async (req, res) => {
   try {
     const c = await coll();
-    const items = await c.find({}).limit(500).toArray();
+    const items = await c.find({}).limit(10).toArray();
     res.json(items);
   } catch (err) {
     res.status(500).json({ error: err.message });
