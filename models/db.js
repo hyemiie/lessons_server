@@ -6,9 +6,9 @@ const uri = process.env.MONGODB_URI;
 if (!uri) {
   throw new Error('MONGODB_URI not set in .env');
 }
-console.log("uri", uri)
+
+
 const client = new MongoClient(uri, {
-  // options if needed
   useNewUrlParser: true,
   useUnifiedTopology: true
 });

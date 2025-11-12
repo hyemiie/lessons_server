@@ -7,7 +7,8 @@ const { connect } = require('./models/db');
 
 const lessonsRouter = require('./routes/lesson');
 const ordersRouter = require('./routes/order');
-const logger = require('./logger');
+const imageMiddleware = require('./middleware/image');
+const logger = require('./middleware/logger');
 
 const app = express();
 app.use(cors());
@@ -16,6 +17,7 @@ app.use(logger);
 
 app.use('/api/lessons', lessonsRouter);
 app.use('/api/orders', ordersRouter);
+app.use('/api/', imageMiddleware);
 
 app.get('/health_check', (req, res) => res.json({ status: 'ok' }));
 
