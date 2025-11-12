@@ -97,9 +97,10 @@ router.get("/search/:searchTerm", async (req, res) => {
     res.json({ success: true, data: results }); // ✅ send the response
   } catch (err) {
     console.error('Search error:', err);
-    res.status(500).json({ success: false, message: 'Server error' }); // ✅ send error
+    res.status(500).json({ success: false, message: 'Server error' }); 
   }
 });
+
 
 
 module.exports = router;
