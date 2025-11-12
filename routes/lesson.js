@@ -5,20 +5,34 @@ const { ObjectId } = require('mongodb');
 
 async function coll() {
   const db = await connect();
-  return db.collection('lesson'); 
+  return db.collection('Lessons'); 
 }
 
 router.get('/', async (req, res) => {
   try {
     const c = await coll();
-    const limit = Math.min(parseInt(req.query.limit) || 100, 1000);
-    const skip = parseInt(req.query.skip) || 0;
-    const items = await c.find({}).skip(skip).limit(limit).toArray();
-    res.json(items);
+    // const limit = Math.min(parseInt(req.query.limit) || 100, 1000);
+    // const skip = parseInt(req.query.skip) || 0;
+    // const items = await c.find({}).skip(skip).limit(limit).toArray();
+    const lessons = await c.find().toArray()
+    res.json(lessons);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
+
+router.get('/lessons', async(req,res) =>{
+  try{
+    const Lessonss = await coll();
+    const all_lessons = Lessonss.findAll()
+    console.log(all_lessons)
+  }
+  catch(err){
+    console.log("err", err)
+
+  }
+})
 
 router.get('/:id', async (req, res) => {
   try {
