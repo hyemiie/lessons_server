@@ -33,7 +33,8 @@ router.post('/', async (req, res) => {
   try {
     const c = await coll();
     const payload = req.body;
-    if (!payload.customerName || !payload.items) return res.status(400).json({ error: 'customerName and items required' });
+    console.log( "req", req.body)
+    if (!payload.id || !payload.price) return res.status(400).json({ error: 'payload details incomplete' });
     const result = await c.insertOne(Object.assign({ createdAt: new Date() }, payload));
     res.status(201).json({ insertedId: result.insertedId });
   } catch (err) {
