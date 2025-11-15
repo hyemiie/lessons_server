@@ -36,8 +36,10 @@ router.post('/', async (req, res) => {
     console.log( "req", req.body)
     if (!payload.id || !payload.price) return res.status(400).json({ error: 'payload details incomplete' });
     const result = await c.insertOne(Object.assign({ createdAt: new Date() }, payload));
+    console.log("result", result)
     res.status(201).json({ insertedId: result.insertedId });
   } catch (err) {
+    console.log("error", err)
     res.status(500).json({ error: err.message });
   }
 });
@@ -56,16 +58,57 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+
+// router.delete('/:id', async (req, res) => {
+//   try {
+//     const c = await coll();
+//     const id = req.params.id.trim();
+//     console.log("id", new ObjectId(id))
+//     const id2 =  new ObjectId(id)
+//     console.log("id",id2)
+
+
+//     if (!ObjectId.isValid(id)) {
+//       return res.status(400).json({ error: 'Invalid ObjectId' });
+//     }
+
+//     const result = await c.findOne({ _id: new ObjectId(id) });
+//     console.log("result", result)
+//     if (result.deletedCount === 0) return res.status(404).json({ error: 'Not found' });
+
+//     res.json({ deletedCount: result.deletedCount });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: 'Server error' });
+//   }
+// });
+
+
 router.delete('/:id', async (req, res) => {
   try {
     const c = await coll();
-    const id = req.params.id;
-    const result = await c.deleteOne({ _id: new ObjectId(id) });
-    if (result.deletedCount === 0) return res.status(404).json({ error: 'Not found' });
+    const id = req.params.id.trim();
+
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ error: 'Invalid ObjectId' });
+    }
+    console.log("Deleting id:", JSON.stringify(id));
+
+
+    const objectId = new ObjectId(id);
+    const result = await c.deleteOne({ _id: id });
+    console.log("result", result);
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ error: 'Not found' });
+    }
+
     res.json({ deletedCount: result.deletedCount });
   } catch (err) {
-    res.status(400).json({ error: 'Invalid id' });
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
   }
 });
+
 
 module.exports = router;

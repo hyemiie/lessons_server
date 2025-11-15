@@ -51,10 +51,15 @@ router.put('/:id', async (req, res) => {
     const c = await coll();
     const id = req.params.id;
     const payload = req.body;
-    const result = await c.updateOne({ _id: new ObjectId(id) }, { $set: payload });
+    console.log("dataaa", id, payload)
+    const { _id, ...updateData } = req.body;
+
+    const result = await c.updateOne({ _id: new ObjectId(id) }, { $set: updateData });
+    console.log("update result", result)
     if (result.matchedCount === 0) return res.status(404).json({ error: 'Not found' });
     res.json({ modifiedCount: result.modifiedCount });
   } catch (err) {
+    console.log("error", err)
     res.status(400).json({ error: 'Invalid id' });
   }
 });
