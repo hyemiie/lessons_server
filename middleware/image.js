@@ -4,8 +4,8 @@ const fs = require('fs');
 
 const router = express.Router();
 
-router.get('/images/:imageName', (req, res) => {
-  const imagePath = path.join(__dirname, 'public', 'images', req.params.imageName);
+router.get('/:imageName', (req, res) => {
+const imagePath = path.join(__dirname, '..', 'images', req.params.imageName);
 
   fs.access(imagePath, fs.constants.F_OK, (err) => {
     if (err) {
@@ -14,3 +14,5 @@ router.get('/images/:imageName', (req, res) => {
     res.sendFile(imagePath);
   });
 });
+
+module.exports = router;

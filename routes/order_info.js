@@ -5,7 +5,7 @@ const { ObjectId } = require('mongodb');
 
 async function coll() {
   const db = await connect();
-  return db.collection('order'); 
+  return db.collection('order_info'); 
 }
 
 router.get('/', async (req, res) => {
@@ -33,13 +33,26 @@ router.post('/', async (req, res) => {
   try {
     const c = await coll();
     const payload = req.body;
-    console.log( "req", req.body)
-    if (!payload.id || !payload.price) return res.status(400).json({ error: 'payload details incomplete' });
-    const result = await c.insertOne(Object.assign({ createdAt: new Date() }, payload));
-    console.log("result", result)
+
+    console.log("req", payload);
+
+    // Validate required fields
+    if (!payload.name || !payload.phone || !payload.lessonIDs || !payload.spaces) {
+      return res.status(400).json({ error: "Incomplete order details" });
+    }
+
+    // Insert into DB
+    const result = await c.insertOne({
+      ...payload,
+      createdAt: new Date()
+    });
+
+    console.log("result", result);
+
     res.status(201).json({ insertedId: result.insertedId });
+
   } catch (err) {
-    console.log("error", err)
+    console.log("error", err);
     res.status(500).json({ error: err.message });
   }
 });

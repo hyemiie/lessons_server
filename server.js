@@ -7,17 +7,21 @@ const { connect } = require('./models/db');
 
 const lessonsRouter = require('./routes/lesson');
 const ordersRouter = require('./routes/order');
-// const imageMiddleware = require('./middleware/image');
+const orderInfoRouter = require('./routes/order_info');
+const imageMiddleware = require('./middleware/image');
 const logger = require('./middleware/logger');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: ["https://hyemiie.github.io", "http://127.0.0.1:5501"]
+}));
 app.use(express.json()); 
 app.use(logger); 
 
 app.use('/api/lessons', lessonsRouter);
 app.use('/api/orders', ordersRouter);
-// app.use('/api/', imageMiddleware);
+app.use('/api/order_info', orderInfoRouter);
+app.use('/images', imageMiddleware);
 
 app.get('/health_check', (req, res) => res.json({ status: 'ok' }));
 
