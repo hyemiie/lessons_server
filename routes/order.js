@@ -36,7 +36,6 @@ router.post('/', async (req, res) => {
     console.log( "req", req.body)
     if (!payload.id || !payload.price) return res.status(400).json({ error: 'payload details incomplete' });
     const result = await c.insertOne(Object.assign({ createdAt: new Date() }, payload));
-    console.log("result", result)
     res.status(201).json({ insertedId: result.insertedId });
   } catch (err) {
     console.log("error", err)

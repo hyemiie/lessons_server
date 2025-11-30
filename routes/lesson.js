@@ -57,7 +57,7 @@ router.put('/:id', async (req, res) => {
     const result = await c.findOneAndUpdate({ _id: new ObjectId(id) }, { $set: updateData }, { returnDocument: 'after' });
     console.log("update result", result)
     if (result.matchedCount === 0) return res.status(404).json({ error: 'Not found' });
-    res.json({ modifiedResult: result  });
+    res.json({ modifiedResult: result.value  });
   } catch (err) {
     console.log("error", err)
     res.status(400).json({ error: 'Invalid id' });

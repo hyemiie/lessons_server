@@ -36,12 +36,10 @@ router.post('/', async (req, res) => {
 
     console.log("req", payload);
 
-    // Validate required fields
     if (!payload.name || !payload.phone || !payload.lessonIDs || !payload.spaces) {
       return res.status(400).json({ error: "Incomplete order details" });
     }
 
-    // Insert into DB
     const result = await c.insertOne({
       ...payload,
       createdAt: new Date()
